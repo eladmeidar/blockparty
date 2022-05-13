@@ -19,7 +19,9 @@ gem 'haml-rails'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem "omniauth-rails_csrf_protection"
 gem 'twitter'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
