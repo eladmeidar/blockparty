@@ -9,6 +9,7 @@ class GetBlockedUsersJob
       next_cursor = cursor || -1
       blocked_response = user.get_blocked_users(cursor: next_cursor).to_h
       next_cursor = blocked_response[:next_cursor]
+    
       blocked_response[:users].each do |blocked_attributes|
         user.add_blocked_user(blocked_attributes)
       end

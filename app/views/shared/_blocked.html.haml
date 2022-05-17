@@ -1,0 +1,10 @@
+.row
+    .col-sm-4.offset-sm-4
+        .card.profile
+            .row.g-6
+                .col-sm-4
+                    =image_tag user.twitter_avatar_url, class: 'img-thumbnail', size: '150x150'
+                .col-sm-8
+                    .card-body
+                        %h5.card-title
+                            = user.twitter_handle

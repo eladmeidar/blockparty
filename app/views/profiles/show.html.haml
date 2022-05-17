@@ -1,0 +1,5 @@
+.row
+    = render partial: 'shared/profile', locals: {user: @user}
+-# .row
+-#     %h3.text-center Block list
+-#     = render partial: 'shared/blocked', collection: @user.blocked_users, as: :user

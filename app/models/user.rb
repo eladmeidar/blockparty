@@ -50,13 +50,45 @@ class User
   end
 
   def add_blocked_user(user_attributes)
-    blocked = BlockedUser.where(twitter_uid: user_attributes[:id]).first_or_create do |blocked_user|
+    blocked = BlockedUser.where(twitter_uid: user_attributes[:id]).first_or_initialize do |blocked_user|
       blocked_user.twitter_handle =  user_attributes[:screen_name]
       blocked_user.twitter_name = user_attributes[:name]
       blocked_user.twitter_avatar_url= user_attributes[:profile_image_url]
     end
+
+    if blocked.new_record?
+      blocked.save!      
+      ApplyBlockToFollowersJob.perform_async(self.id.to_s, blocked.id.to_s)
+    end
+
     self.blocked_users << blocked
     self.save
+  end
+
+  def handle
+    "@#{self.twitter_handle}"
+  end
+
+  def follow!(user)
+    Friendship.new(self).follow(user)
+    true
+  end
+
+  def unfollow!(user)
+    Friendship.new(self).unfollow(user)
+    true
+  end
+
+  def block!(uid)
+    twitter.block(uid)
+  end
+
+  def followers_count
+    Friendship.new(self).followers.count
+  end
+
+  def following_count
+    Friendship.new(self).following.count
   end
 
   def update_blocked_users!
@@ -69,6 +101,10 @@ class User
 
   def tweet(message)
     twitter.update(message)
+  end
+
+  def to_param
+    twitter_handle
   end
   protected
 

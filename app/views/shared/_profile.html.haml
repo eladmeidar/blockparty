@@ -1,0 +1,22 @@
+.row
+    .col-sm-4.offset-sm-4
+        .card.profile
+            .row.g-6
+                .col-sm-4
+                    =image_tag user.twitter_avatar_url, class: 'img-thumbnail', size: '150x150'
+                    %p
+                        %span.badge.bg-primary
+                            = pluralize(user.following_count, 'following')
+                        %span.badge.bg-primary
+                            = pluralize(user.followers_count, 'followers')
+                .col-sm-8
+                    .card-body
+                        %h5.card-title
+                            = user.handle
+                        %p.card-text
+                            currently blocking
+                            = pluralize(user.blocked_users.count, 'users')
+                        - if user_signed_in? && user != current_user
+                            %a.btn.btn-primary{ href: user_follow_path(user), method: 'post' }
+                                Follow
+                                = user.handle
